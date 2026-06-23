@@ -38,15 +38,17 @@
             <form action="{{ route('pengajuan-po.store') }}" method="POST">
                 @csrf
 
+                {{--input hidden (menyimpan data ke db tanpa perlu ditampilkan ke pengguna) untuk permintaan barang--}}
                 @if($permintaan)
-    <input type="hidden"
-           name="sumber_po"
-           value="permintaan_barang">
-@else
-    <input type="hidden"
-           name="sumber_po"
-           value="stok_minimum">
-@endif
+                    <input type="hidden"
+                        name="sumber_po"
+                        value="permintaan_barang">
+                {{--input hidden untuk stok minimum--}}
+                @else
+                    <input type="hidden"
+                        name="sumber_po"
+                        value="stok_minimum">
+                @endif
 
                 {{-- Simpan referensi permintaan jika ada --}}
                 @if($permintaan)
@@ -151,6 +153,53 @@
                                             </td>
                                         </tr>
                                         @endforeach
+
+                                    {{--untuk auto isi nama barang dll dari barang dinotifikasi stok menipis 
+                                        di form pengajuan po jadi ngga perlu input nama barang dll lagi--}}
+                                    @elseif($barangStokMinimum)
+
+                                        <tr class="baris-po">
+                                            <td>
+                                                <select name="barang_id[]" class="form-control" required>
+                                                    <option value="{{ $barangStokMinimum->id }}" selected>
+                                                        {{ $barangStokMinimum->nama_barang }}
+                                                        ({{ $barangStokMinimum->satuan }})
+                                                    </option>
+                                                </select>
+
+                                                <small class="text-danger">
+                                                    Stok: {{ $barangStokMinimum->stok }}
+                                                    |
+                                                    Minimum: {{ $barangStokMinimum->stok_minimum }}
+                                                </small>
+                                            </td>
+
+                                            <td>
+                                                <input type="number"
+                                                    name="qty[]"
+                                                    class="form-control po-qty"
+                                                    value="{{ $barangStokMinimum->stok_minimum }}"
+                                                    min="1"
+                                                    {{--untuk hitung subtotal ketika qty dirubah--}}
+                                                    oninput="hitungSubtotal(this)">
+                                            </td>
+
+                                            <td>
+                                                <input type="number"
+                                                    name="harga_estimasi[]"
+                                                    class="form-control po-harga"
+                                                    value="{{ $barangStokMinimum->harga_terakhir }}"
+                                                    {{--untuk hitung subtotal ketika qty dirubah--}}
+                                                    oninput="hitungSubtotal(this)">
+                                            </td>
+
+                                            <td class="po-sub">
+                                                Rp0
+                                            </td>
+
+                                            <td></td>
+                                        </tr>
+
                                     @else
                                         {{-- Form kosong biasa --}}
                                         <tr class="baris-po">
@@ -262,5 +311,9 @@ function bindHapusPo() {
 // Hitung total awal saat halaman dimuat
 hitungGrandTotal();
 bindHapusPo();
+
+document.querySelectorAll('.po-qty').forEach(function(el){
+    hitungSubtotal(el);
+});
 </script>
 @endsection

@@ -28,6 +28,13 @@
 @extends('layouts.app')
 
 @section('content')
+
+{{--munculin pesan yang notif stok menipis udah dibuatin po--}}
+@if(session('warning'))
+<div class="alert alert-warning">
+    {{ session('warning') }}
+</div>
+@endif
 <div class="container-fluid px-3 px-lg-4 py-4">
           <div class="page-heading">
             <div class="page-heading-copy">
@@ -187,9 +194,17 @@
                             <span class="activity-dot bg-danger"></span>
 
                             <div>
-                                <p class="mb-1 fw-semibold">
+                                {{--ini nptifikasi stok menipis jika diklik barangnya 
+                                    maka akan mengarahkan ke pembuatan po dgn sumber po stok minimum--}}
+                                <a href="{{ route('pengajuan-po.create', [
+                                        'barang_id' => $barang->id,
+                                        'sumber_po' => 'stok_minimum'
+                                    ]) }}"
+                                class="fw-semibold text-danger">
+
                                     {{ $barang->nama_barang }}
-                                </p>
+
+                                </a>
 
                                 <p class="text-muted small mb-0">
                                     Stok tersisa {{ $barang->stok }} unit

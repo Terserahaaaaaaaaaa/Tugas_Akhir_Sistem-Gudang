@@ -26,30 +26,64 @@ class PengajuanPoController extends Controller
     }
 
     public function create(Request $request)
-{
-    // create hanya bisa dilakukan admin
-    // if (Auth::user()->role != 'admin') {
-    //     abort(403);
-    // }
+    {
+        // create hanya bisa dilakukan admin
+        // if (Auth::user()->role != 'admin') {
+        //     abort(403);
+        // }
 
-    $barang = Barang::orderBy('nama_barang')->get();
+        //difunction create ini bisa di buat po berdasarkan sumber po permintaan barang dan stok minimum
+        $barang = Barang::orderBy('nama_barang')->get();
 
-    $permintaan = null;
+        $permintaan = null;
+        $barangStokMinimum = null;
 
-    if ($request->permintaan_id) {
+        if ($request->permintaan_id) {
 
-        $permintaan = PermintaanBarang::with('detail.barang')
-            ->findOrFail($request->permintaan_id);
+            $permintaan = PermintaanBarang::with('detail.barang')
+                ->findOrFail($request->permintaan_id);
+        }
+
+            //perintah kalo misal barang dinotifikasi stok menipis udah diklik dan dibuatin po maka
+            //akan munculin pesan barang ini udah dibuatin po
+        if ($request->barang_id) {
+
+    $detailPo = PengajuanPoDetail::with('pengajuanPo')
+        ->where('barang_id', $request->barang_id)
+        ->whereHas('pengajuanPo', function ($q) {
+            $q->whereIn('status_po', [
+                'pending',
+                'disetujui'
+            ]);
+        })
+        ->first();
+
+    if ($detailPo) {
+
+        return redirect()
+            ->route('home')
+            ->with(
+                'warning',
+                'Barang sudah diajukan pada PO #' .
+                $detailPo->pengajuan_po_id .
+                ' dan masih dalam proses.'
+            );
     }
 
-    return view(
-        'pengajuan_po.create',
-        compact(
-            'barang',
-            'permintaan'
-        )
+    $barangStokMinimum = Barang::findOrFail(
+        $request->barang_id
     );
 }
+
+        return view(
+            'pengajuan_po.create',
+            compact(
+                'barang',
+                'permintaan',
+                'barangStokMinimum'
+            )
+        );
+    }
 
     public function store(Request $request)
     {
