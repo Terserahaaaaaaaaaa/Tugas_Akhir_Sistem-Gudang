@@ -90,10 +90,10 @@
                                     <td class="text-right">Rp{{ number_format($detail->harga_estimasi, 0, ',', '.') }}</td>
                                     <td class="text-right">Rp{{ number_format($detail->subtotal, 0, ',', '.') }}</td>
                                     <td class="text-center">
-                                        @if($detail->status_item === 'disetujui')
+                                        @if($detail->status_item === 'diterima')
+                                            <span class="badge badge-primary">Diterima</span>
+                                        @elseif($detail->status_item === 'disetujui')
                                             <span class="badge badge-success">Disetujui</span>
-                                        @elseif($detail->status_item === 'ditahan')
-                                            <span class="badge badge-warning">Ditahan</span>
                                         @elseif($detail->status_item === 'ditolak')
                                             <span class="badge badge-danger">Ditolak</span>
                                         @else

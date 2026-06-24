@@ -24,8 +24,8 @@
                     <div class="card-tools">
                         @if($permintaanBarang->status_permintaan === 'selesai')
                             <span class="badge badge-success">Selesai</span>
-                        @elseif($permintaanBarang->status_permintaan === 'diproses')
-                            <span class="badge badge-info">Diproses</span>
+                        @elseif($permintaanBarang->status_permintaan === 'diajukan_po')
+                            <span class="badge badge-info">Diajukan PO</span>
                         @else
                             <span class="badge badge-warning">Menunggu Tindak Lanjut</span>
                         @endif

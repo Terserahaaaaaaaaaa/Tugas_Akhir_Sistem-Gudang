@@ -12,11 +12,11 @@
     </div>
 
     {{-- @if(Auth::user()->role == 'admin') --}}
-        <a href="{{ route('pengajuan-po.create') }}"
+        {{-- <a href="{{ route('pengajuan-po.create') }}"
         class="btn btn-primary">
             <i class="bi bi-plus-circle"></i>
             Buat PO
-        </a>
+        </a> --}}
     {{-- @endif --}}
 </div>
 
@@ -36,10 +36,10 @@
                     <form method="GET" class="mb-3">
                         <select name="status" class="form-control form-control-sm d-inline-block w-auto" onchange="this.form.submit()">
                             <option value="">Semua Status</option>
-<option value="pending">Menunggu Approval</option>
-<option value="disetujui">Disetujui</option>
-<option value="disetujui_sebagian">Disetujui Sebagian</option>
-<option value="ditolak">Ditolak</option>
+                            <option value="pending">Menunggu Approval</option>
+                            <option value="disetujui">Disetujui</option>
+                            <option value="disetujui_sebagian">Disetujui Sebagian</option>
+                            <option value="ditolak">Ditolak</option>
                         </select>
                     </form>
                     <div class="table-responsive">
@@ -66,37 +66,38 @@
                                     </td>
                                     <td class="text-center">
 
-    @if($item->status_po === 'pending')
-        <span class="badge badge-warning">
-            Menunggu Approval
-        </span>
+                                        @if($item->status_po === 'pending')
+                                            <span class="badge badge-warning text-dark">
+                                                Menunggu Approval
+                                            </span>
 
-    @elseif($item->status_po === 'disetujui')
-        <span class="badge badge-success">
-            Disetujui
-        </span>
+                                        @elseif($item->status_po === 'disetujui')
+                                            <span class="badge badge-success text-dark">
+                                                Disetujui
+                                            </span>
 
-    @elseif($item->status_po === 'disetujui_sebagian')
-        <span class="badge badge-info">
-            Disetujui Sebagian
-        </span>
+                                        @elseif($item->status_po === 'disetujui_sebagian')
+                                            <span class="badge badge-info text-dark">
+                                                Disetujui Sebagian
+                                            </span>
 
-    @elseif($item->status_po === 'ditolak')
-        <span class="badge badge-danger">
-            Ditolak
-        </span>
+                                        @elseif($item->status_po === 'ditolak')
+                                            <span class="badge badge-danger text-dark">
+                                                Ditolak
+                                            </span>
 
-    @endif
+                                        @endif
 
-</td>
+                                    </td>
                                     <td class="text-center">
 
-                            <a href="{{ route('pengajuan-po.show', $item->id) }}"
-                               class="btn btn-info btn-sm">
-                                <i class="bi bi-eye-fill"></i>
-                            </a>
+                                <a href="{{ route('pengajuan-po.show', $item->id) }}"
+                                class="btn btn-info btn-sm">
+                                    <i class="bi bi-eye-fill"></i>
+                                </a>
 
-                            {{-- @if(Auth::user()->role == 'admin') --}}
+                                {{--hapus hanya bisa muncul dan dilakukan oleh admin--}}
+                            @if(Auth::user()->role == 'admin')
                                 <form action="{{ route('pengajuan-po.destroy', $item->id) }}"
                                     method="POST"
                                     class="d-inline"
@@ -110,9 +111,11 @@
                                     </button>
 
                                 </form>
-                            {{-- @endif --}}
+                            @endif
 
-                            {{-- @if(Auth::user()->role == 'keuangan' && $item->status_po == 'pending') --}}
+                            {{--tombol approval hanya akan muncul dan dilakukan oleh keuangan
+                                dan tombol hanya muncul dan bisa dilakukan jika status po nya pending--}}
+                            @if(Auth::user()->role == 'keuangan' && $item->status_po == 'pending')
                                 <a href="{{ route('pengajuan-po.approval', $item->id) }}"
                                 class="btn btn-success btn-sm"
                                 title="Approval">
@@ -120,7 +123,7 @@
                                     <i class="bi bi-check-circle-fill"></i>
 
                                 </a>
-                            {{-- @endif --}}
+                            @endif
 
                         </td>
                                 </tr>

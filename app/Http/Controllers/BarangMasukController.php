@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BarangMasuk;
 use App\Models\BarangMasukDetail;
 use App\Models\PengajuanPo;
+use App\Models\PermintaanBarang;
 use App\Models\RiwayatHarga;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -86,6 +87,12 @@ class BarangMasukController extends Controller
                 // Tambah stok
                 $detail->barang->increment('stok', $qty);
 
+                //kalo misal barang udah masuk, distatus item barang di pengajuan po akan berubah 
+                //dari disetujui menjadi diterima
+                $detail->pengajuanPoDetail()->update([
+                    'status_item' => 'diterima'
+                ]);
+                
                 // Catat riwayat harga jika berubah
                 $hargaLama = (float) $detail->barang->harga_terakhir;
                 if ($hargaLama !== $hargaBeli) {
@@ -112,6 +119,17 @@ class BarangMasukController extends Controller
             if ($totalDiterima >= $totalDisetujui) {
                 $po->update(['status_po' => 'disetujui']);
             }
+
+            PermintaanBarang::whereHas('detail', function ($q) use ($po) {
+                $q->whereIn(
+                    'id',
+                    $po->detail()
+                        ->whereNotNull('permintaan_barang_detail_id')
+                        ->pluck('permintaan_barang_detail_id')
+                );
+            })->update([
+                'status_permintaan' => 'barang_tersedia'
+            ]);
         });
 
         return redirect()
@@ -140,20 +158,19 @@ class BarangMasukController extends Controller
 
         // Kalau suatu saat Barang Masuk dihapus, stoknya tidak kembali berkurang. makanya pake code dibawah biar ngga gitu
         DB::transaction(function () use ($barangMasuk) {
+
             foreach ($barangMasuk->detail as $detail) {
 
                 $barang = $detail->barang;
 
                 $barang->stok -= $detail->qty;
 
-                $barang->status_barang = $this->cekStatusBarang($barang->stok);
-
                 $barang->save();
             }
 
             $barangMasuk->delete();
         });
-        
+
         return redirect()
             ->route('barang-masuk.index')
             ->with('success', 'Data barang masuk berhasil dihapus.');

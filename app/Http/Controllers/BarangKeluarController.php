@@ -139,9 +139,9 @@ class BarangKeluarController extends Controller
     public function destroy(BarangKeluar $barangKeluar)
     {
         //hapus hanya bisa dilakukan oleh logistik
-        if(Auth::user()->role != 'logistik'){
-            abort(403);
-        }
+        // if(Auth::user()->role != 'logistik'){
+        //     abort(403);
+        // }
 
         $barangKeluar->delete();
 

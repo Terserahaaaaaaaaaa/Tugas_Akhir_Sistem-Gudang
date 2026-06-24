@@ -168,7 +168,7 @@ class PengajuanPoController extends Controller
 
     /**
      * Simpan keputusan approval per item.
-     * status_item: disetujui | ditahan | ditolak
+     * status_item: disetujui | ditolak
      */
     public function simpanApproval(Request $request, PengajuanPo $pengajuanPo)
     {
@@ -176,7 +176,7 @@ class PengajuanPoController extends Controller
 
         $request->validate([
             'status_item'   => 'required|array',
-            'status_item.*' => 'required|in:disetujui,ditahan,ditolak',
+            'status_item.*' => 'required|in:disetujui,ditolak',
         ]);
 
         DB::transaction(function () use ($request, $pengajuanPo) {

@@ -10,14 +10,14 @@
         </p>
     </div>
 
-    {{-- @if(Auth::user()->role == 'logistik') --}}
+    @if(Auth::user()->role == 'logistik')
         <a href="{{ route('barang-masuk.create') }}"
         class="btn btn-primary">
 
             <i class="bi bi-plus-circle"></i>
             Tambah Barang Masuk
         </a>
-    {{-- @endif --}}
+    @endif
 </div>
 <div class="content-wrapper">
     <section class="content">
@@ -74,7 +74,8 @@
                                 <i class="bi bi-eye-fill"></i>
                             </a>
 
-                            {{-- @if(Auth::user()->role == 'logistik') --}}
+                            {{--yang bisa hapus cuma logistik--}}
+                            @if(Auth::user()->role == 'logistik')
                                 <form action="{{ route('barang-masuk.destroy', $item->id) }}"
                                     method="POST"
                                     class="d-inline"
@@ -87,7 +88,7 @@
                                         <i class="bi bi-trash-fill"></i>
                                     </button>
                                 </form>
-                            {{-- @endif --}}
+                            @endif
 
                         </td>
                                 </tr>

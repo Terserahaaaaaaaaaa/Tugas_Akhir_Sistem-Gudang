@@ -68,13 +68,6 @@
                                                            onchange="hitungApTotal()" required>
                                                     <label for="ap_setuju_{{ $detail->id }}" class="btn btn-outline-success btn-sm ap-label">Setujui</label>
 
-                                                    <input type="radio" name="status_item[{{ $detail->id }}]" value="ditahan"
-                                                           id="ap_tahan_{{ $detail->id }}"
-                                                           class="d-none ap-radio"
-                                                           data-subtotal="0"
-                                                           onchange="hitungApTotal()">
-                                                    <label for="ap_tahan_{{ $detail->id }}" class="btn btn-outline-warning btn-sm ap-label">Tahan</label>
-
                                                     <input type="radio" name="status_item[{{ $detail->id }}]" value="ditolak"
                                                            id="ap_tolak_{{ $detail->id }}"
                                                            class="d-none ap-radio"

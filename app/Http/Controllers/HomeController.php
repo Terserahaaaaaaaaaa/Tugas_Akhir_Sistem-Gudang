@@ -146,7 +146,7 @@ class HomeController extends Controller
             ->sortByDesc('tanggal')
             ->take(10);
 
-        return view('home', compact(
+        return view('dashboard.admin', compact(
             'totalPo',
             'totalPermintaan',
             'totalBarangMasuk',

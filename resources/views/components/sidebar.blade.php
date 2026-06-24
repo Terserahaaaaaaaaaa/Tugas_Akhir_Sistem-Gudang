@@ -23,17 +23,17 @@
         </a>
 
         {{--dibungkus @if untuk pemisah role sebenernya untuk menyembunyikan fitur barang dari role selain yang dipilih--}}
-        {{-- @if(Auth::user()->role == 'admin') --}}
+        @if(Auth::user()->role == 'admin')
         <li class="nav-item">
             <a href="{{ route('user.index') }}" class="nav-link">
                 <i class="bi bi-people-fill"></i>
                 <span>Data User</span>
             </a>
         </li>
-        {{-- @endif --}}
+        @endif
 
         {{--dibungkus @if untuk pemisah role sebenernya untuk menyembunyikan fitur barang dari role selain yang dipilih--}}
-        {{-- @if(Auth::user()->role == 'admin') --}}
+        @if(Auth::user()->role == 'admin')
         <a class="nav-link {{ request()->routeIs('kategori-barang.*') ? 'active' : '' }}"
         href="{{ route('kategori-barang.index') }}">
             <span class="nav-icon">
@@ -41,20 +41,21 @@
             </span>
             <span class="nav-text">Kategori Barang</span>
         </a>
-        {{-- @endif --}}
+        @endif
 
         {{--dibungkus @if untuk pemisah role sebenernya untuk menyembunyikan fitur barang dari role selain yang dipilih--}}
         {{-- @if(in_array(Auth::user()->role, ['admin', 'logistik', 'keuangan'])) --}}
+        @if(Auth::user()->role == 'admin')
         <a class="nav-link {{ request()->routeIs('barang.*') ? 'active' : '' }}" href="{{ route('barang.index') }}">
             <span class="nav-icon">
                 <i class="bi bi-box-seam"></i>
             </span>
             <span class="nav-text">Barang</span>
         </a>
-        {{-- @endif --}}
+        @endif
 
         {{--dibungkus @if untuk pemisah role sebenernya untuk menyembunyikan fitur barang dari role selain yang dipilih--}}
-        @if(in_array(Auth::user()->role, ['admin', 'keuangan', 'logistik']))
+        @if(in_array(Auth::user()->role, ['admin', 'keuangan', 'logistik', 'pimpinan']))
         <a class="nav-link {{ request()->routeIs('stok-barang.*') ? 'active' : '' }}" href="{{ route('stok-barang.index') }}">
             <span class="nav-icon">
                 <i class="bi bi-boxes"></i>
@@ -65,6 +66,7 @@
 
         {{--dibungkus @if untuk pemisah role sebenernya untuk menyembunyikan fitur barang dari role selain yang dipilih--}}
         {{-- @if(Auth::user()->role == 'logistik') --}}
+        @if(in_array(Auth::user()->role, ['admin', 'logistik']))
         <a class="nav-link {{ request()->routeIs('stok-opname.*') ? 'active' : '' }}"
         href="{{ route('stok-opname.index') }}">
             <span class="nav-icon">
@@ -72,47 +74,47 @@
             </span>
             <span class="nav-text">Stok Opname</span>
         </a>
-        {{-- @endif --}}
+        @endif
 
         {{--dibungkus @if untuk pemisah role sebenernya untuk menyembunyikan fitur barang dari role selain yang dipilih--}}
-        {{-- @if(in_array(Auth::user()->role, ['logistik', 'admin'])) --}}
+        @if(in_array(Auth::user()->role, ['logistik', 'admin']))
         <a class="nav-link {{ request()->routeIs('barang-masuk.*') ? 'active' : '' }}" href="{{ route('barang-masuk.index') }}">
             <span class="nav-icon">
                 <i class="bi bi-box-arrow-in-down"></i>
             </span>
             <span class="nav-text">Barang Masuk</span>
         </a>
-        {{-- @endif --}}
+        @endif
 
         {{--dibungkus @if untuk pemisah role sebenernya untuk menyembunyikan fitur barang dari role selain yang dipilih--}}
-        {{-- @if(in_array(Auth::user()->role, ['logistik', 'admin'])) --}}
+        @if(in_array(Auth::user()->role, ['logistik', 'admin']))
         <a class="nav-link {{ request()->routeIs('barang-keluar.*') ? 'active' : '' }}" href="{{ route('barang-keluar.index') }}">
             <span class="nav-icon">
                 <i class="bi bi-box-arrow-up"></i>
             </span>
             <span class="nav-text">Barang Keluar</span>
         </a>
-        {{-- @endif --}}
+        @endif
 
         {{--dibungkus @if untuk pemisah role sebenernya untuk menyembunyikan fitur barang dari role selain yang dipilih--}}
-        {{-- @if(in_array(Auth::user()->role, ['logistik', 'admin'])) --}}
+        @if(in_array(Auth::user()->role, ['logistik', 'admin']))
         <a class="nav-link {{ request()->routeIs('permintaan-barang.*') ? 'active' : '' }} "href="{{ route('permintaan-barang.index') }}">
             <span class="nav-icon">
                 <i class="bi bi-clipboard-check"></i>
             </span>
             <span class="nav-text">Permintaan Barang</span>
         </a>
-        {{-- @endif --}}
+        @endif
 
         {{--dibungkus @if untuk pemisah role sebenernya untuk menyembunyikan fitur barang dari role selain yang dipilih--}}
-        {{-- @if(in_array(Auth::user()->role, ['admin', 'keuangan'])) --}}
+        @if(in_array(Auth::user()->role, ['admin', 'keuangan']))
         <a class="nav-link {{ request()->routeIs('pengajuan-po.*') ? 'active' : '' }}" href="{{ route('pengajuan-po.index') }}">
             <span class="nav-icon">
                 <i class="bi bi-file-earmark-text"></i>
             </span>
             <span class="nav-text">Pengajuan PO</span>
         </a>
-        {{-- @endif --}}
+        @endif
 
         {{-- dibungkus @if untuk pemisah role sebenernya untuk menyembunyikan fitur barang dari role selain yang dipilih
         @if(Auth::user()->role == 'keuangan')
@@ -126,14 +128,14 @@
         
 
         {{--dibungkus @if untuk pemisah role sebenernya untuk menyembunyikan fitur barang dari role selain yang dipilih--}}
-        {{-- @if(in_array(Auth::user()->role, ['admin', 'keuangan', 'pimpinan'])) --}}
+        @if(in_array(Auth::user()->role, ['admin', 'keuangan', 'pimpinan']))
         <a class="nav-link {{ request()->routeIs('laporan.*') ? 'active' : '' }}" href="{{ route('laporan.menu') }}">
             <span class="nav-icon">
                 <i class="bi bi-file-bar-graph"></i>
             </span>
             <span class="nav-text">Laporan</span>
         </a>
-        {{-- @endif --}}
+        @endif
       </nav>
 
       <div class="sidebar-user">

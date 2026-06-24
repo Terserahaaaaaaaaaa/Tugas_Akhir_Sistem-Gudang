@@ -70,44 +70,44 @@
                                             $adaKurang = $item->detail->where('qty_kurang', '>', 0)->count() > 0;
                                         @endphp
                                         @if($adaKurang)
-                                            <span class="badge badge-warning">
+                                            <span class="badge badge-warning text-dark">
                                                 <i class="fas fa-exclamation-triangle"></i> Ada kekurangan
                                             </span>
                                         @else
-                                            <span class="badge badge-success">
+                                            <span class="badge badge-success text-dark">
                                                 <i class="fas fa-check"></i> Terpenuhi
                                             </span>
                                         @endif
                                     </td>
                                     <td class="text-center">
+                                        {{-- Detail --}}
+                                        <a href="{{ route('barang-keluar.show', $item->id) }}"
+                                        class="btn btn-info btn-sm"
+                                        title="Detail">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
 
-    {{-- Detail --}}
-    <a href="{{ route('barang-keluar.show', $item->id) }}"
-       class="btn btn-info btn-sm"
-       title="Detail">
-        <i class="bi bi-eye-fill"></i>
-    </a>
+                                        {{-- Hapus --}}
+                                        {{-- yang bisa hapus cuma logistik --}}
+                                        @if(Auth::user()->role == 'logistik')
+                                        <form action="{{ route('barang-keluar.destroy', $item->id) }}"
+                                            method="POST"
+                                            class="d-inline"
+                                            onsubmit="return confirm('Yakin ingin menghapus data ini?')">
 
-    {{-- Hapus --}}
-    {{-- @if(Auth::user()->role == 'logistik') --}}
-    <form action="{{ route('barang-keluar.destroy', $item->id) }}"
-          method="POST"
-          class="d-inline"
-          onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                            @csrf
+                                            @method('DELETE')
 
-        @csrf
-        @method('DELETE')
+                                            <button type="submit"
+                                                    class="btn btn-danger btn-sm"
+                                                    title="Hapus">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
 
-        <button type="submit"
-                class="btn btn-danger btn-sm"
-                title="Hapus">
-            <i class="bi bi-trash-fill"></i>
-        </button>
+                                        </form>
+                                        @endif
+                                    </td>
 
-    </form>
-    {{-- @endif --}}
-
-</td>
                                 </tr>
                                 @empty
                                 <tr>
