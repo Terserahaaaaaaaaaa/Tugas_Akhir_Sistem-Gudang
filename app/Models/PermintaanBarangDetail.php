@@ -37,7 +37,7 @@ class PermintaanBarangDetail extends Model
     {
         //hasmany untuk model ini dapat memiliki banyak dari model yang terkait
         return $this->hasMany(
-            PengajuanPODetail::class,
+            PengajuanPoDetail::class,
             'permintaan_barang_detail_id'
         );
     }

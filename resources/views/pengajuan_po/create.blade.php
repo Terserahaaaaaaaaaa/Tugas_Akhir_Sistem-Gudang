@@ -117,6 +117,10 @@
                                         @foreach($permintaan->detail as $d)
                                         <tr class="baris-po">
                                             <td>
+                                                <input type="hidden"
+                                                    name="permintaan_barang_detail_id[]"
+                                                    value="{{ $d->id }}">
+                                                    
                                                 <select name="barang_id[]" class="form-control" required>
                                                     <option value="">-- Pilih Barang --</option>
                                                     @foreach($barang as $b)

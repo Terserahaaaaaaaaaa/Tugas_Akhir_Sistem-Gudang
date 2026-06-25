@@ -88,16 +88,18 @@ class PengajuanPoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tanggal_po'        => 'required|date',
-            'sumber_po'         => 'required|in:permintaan_barang,stok_minimum',
-            'kontak_pembelian'  => 'nullable|string|max:150',
-            'metode_pembelian'  => 'required|in:whatsapp,online,beli_langsung',
-            'barang_id'         => 'required|array|min:1',
-            'barang_id.*'       => 'required|exists:barang,id',
-            'qty'               => 'required|array',
-            'qty.*'             => 'required|integer|min:1',
-            'harga_estimasi'    => 'required|array',
-            'harga_estimasi.*'  => 'required|numeric|min:0',
+            'tanggal_po'                    => 'required|date',
+            'sumber_po'                     => 'required|in:permintaan_barang,stok_minimum',
+            'permintaan_barang_detail_id'   => 'nullable|array',
+            'permintaan_barang_detail_id.*' => 'nullable|exists:permintaan_barang_detail,id',
+            'kontak_pembelian'              => 'nullable|string|max:150',
+            'metode_pembelian'              => 'required|in:whatsapp,online,beli_langsung',
+            'barang_id'                     => 'required|array|min:1',
+            'barang_id.*'                   => 'required|exists:barang,id',
+            'qty'                           => 'required|array',
+            'qty.*'                         => 'required|integer|min:1',
+            'harga_estimasi'                => 'required|array',
+            'harga_estimasi.*'              => 'required|numeric|min:0',
         ]);
 
         DB::transaction(function () use ($request) {
@@ -115,12 +117,13 @@ class PengajuanPoController extends Controller
                 $hargaEstimasi  = (float) $request->harga_estimasi[$i];
 
                 PengajuanPoDetail::create([
-                    'pengajuan_po_id' => $po->id,
-                    'barang_id'       => $barangId,
-                    'qty'             => $qty,
-                    'harga_estimasi'  => $hargaEstimasi,
-                    'subtotal'        => $qty * $hargaEstimasi,
-                    'status_item'     => 'menunggu',
+                    'pengajuan_po_id'               => $po->id,
+                    'permintaan_barang_detail_id'   => $request->permintaan_barang_detail_id[$i] ?? null,
+                    'barang_id'                     => $barangId,
+                    'qty'                           => $qty,
+                    'harga_estimasi'                => $hargaEstimasi,
+                    'subtotal'                      => $qty * $hargaEstimasi,
+                    'status_item'                   => 'menunggu',
                 ]);
             }
 
